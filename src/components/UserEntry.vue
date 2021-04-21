@@ -23,9 +23,9 @@ export default class UserEntry extends Vue {
 
     rounds.forEach((round) => {
       console.log(`##################  ${round.totalRankDifference}  ###########################`);
-      this.writeMatchup(round.matchup1);
+      this.writeMatchup(round.matchups[0]);
       console.log("And");
-      this.writeMatchup(round.matchup2);
+      this.writeMatchup(round.matchups[1]);
       console.log('##################################################');
     });
   }
@@ -82,10 +82,10 @@ export default class UserEntry extends Vue {
   }
 
   private writeMatchup(matchup: Matchup) {
-    const pair1 = matchup.pair1;
-    const pair2 = matchup.pair2;
+    const pair1 = matchup.pairs[0];
+    const pair2 = matchup.pairs[1];
 
-    console.log(`${pair1.player1.name}/${pair1.player2.name} vs ${pair2.player1.name}/${pair2.player2.name}`)
+    console.log(`${pair1.players[0].name}/${pair1.players[1].name} vs ${pair2.players[0].name}/${pair2.players[1].name}`)
   }
 }
 </script>

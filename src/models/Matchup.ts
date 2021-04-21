@@ -1,20 +1,36 @@
 import Pair from './Pair';
 
 export default class Matchup {
-    constructor(public pair1: Pair, public pair2: Pair) { }
+    public _pairs: Pair[];
+
+    constructor(pair1: Pair, pair2: Pair) { 
+        this._pairs = [
+            pair1,
+            pair2
+        ]
+    }
 
     public get combinedRankDifference(): number {
-        return Math.abs(this.pair1.combinedRank - this.pair2.combinedRank);
+        return Math.abs(this._pairs[0].combinedRank - this._pairs[1].combinedRank);
+    }
+
+    public get pairs(): Pair[] {
+        return this._pairs;
     }
 
     public hasOverlap(otherMatchup: Matchup): boolean {
-        return this.pair1.hasOverlap(otherMatchup.pair1) || 
-            this.pair1.hasOverlap(otherMatchup.pair2) ||
-            this.pair2.hasOverlap(otherMatchup.pair1) || 
-            this.pair2.hasOverlap(otherMatchup.pair2);
+        for (let otherIndex = 0; otherIndex < 2; otherIndex++) {
+            for (let myIndex = 0; myIndex < 2; myIndex++) {
+                if (this._pairs[myIndex].hasOverlap(otherMatchup.pairs[otherIndex])) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public toString(): string {
-        return `[pair1=${this.pair1}] vs [pair2=${this.pair2}] [rankDifference=${this.combinedRankDifference}]`;
+        return `[pair1=${this._pairs[0]}] vs [pair2=${this._pairs[1]}] [rankDifference=${this.combinedRankDifference}]`;
     }
 }
