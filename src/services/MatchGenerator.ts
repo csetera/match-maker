@@ -2,13 +2,14 @@ import Matchup from '@/models/Matchup';
 import Pair from '@/models/Pair';
 import Player from '@/models/Player';
 import Round from '@/models/Round';
+import { k_combinations } from '@/utils/combinations';
 
 /**
  * Class provides generation of a set of matches based on the
  * provided set of player names.
  */
 export default class MatchGenerator {
-    constructor(public names: Array<string>) { }
+    constructor(public players: Array<string>) { }
 
     /**
      * Generate potential lineups
@@ -52,10 +53,10 @@ export default class MatchGenerator {
     private generatePairs(): Pair[] {
         const pairs = [] as Array<Pair>;
 
-        for (let i = 0; i < 8; i++) {
-            for (let j = i + 1; j < 8; j++) {
-                const player1 = new Player(i + 1, this.names[i]);
-                const player2 = new Player(j + 1, this.names[j]);
+        for (let i = 0; i < this.players.length; i++) {
+            for (let j = i + 1; j < this.players.length; j++) {
+                const player1 = new Player(i + 1, this.players[i]);
+                const player2 = new Player(j + 1, this.players[j]);
                 pairs.push(new Pair(player1, player2));
             }
         }
@@ -69,20 +70,22 @@ export default class MatchGenerator {
      * @returns 
      */
     private generateRounds(): Round[] {
-        const rounds = [] as Array<Round>;
+        // Generate the potential matchups, sorted by rank difference
+        const matchesPerRound = Math.floor(this.players.length / 4);
+        const matchups = this.generateMatchups().sort((matchup1, matchup2) => {
+            return matchup1.combinedRankDifference - matchup2.combinedRankDifference;
+        });
 
-        const matchups = this.generateMatchups();
-        for (let i = 0; i < matchups.length; i++) {
-            for (let j = i + 1; j < matchups.length; j++) {
-                const matchup1 = matchups[i];
-                const matchup2 = matchups[j];
-
-                if (!matchup1.hasOverlap(matchup2)) {
-                    rounds.push(new Round(matchup1, matchup2));
-                }
-            }
-        }
-
-        return rounds;
+        // To avoid blowing up the number of combinations, limit the
+        // matchups to be considered to a reasonable number
+        const slicedMatchups = matchups.slice(0, Math.min(matchups.length, 250));
+        const combinations = k_combinations(slicedMatchups, matchesPerRound);
+        return combinations
+            .map((matches) => {
+                return new Round(matches)
+            })
+            .filter((round) => {
+                return !round.hasMatchupOverlap();
+            });
     }
 }

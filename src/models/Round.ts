@@ -1,20 +1,26 @@
 import Matchup from './Matchup';
 
 export default class Round {
-    private _matchups: Matchup[];
-
-    constructor(matchup1: Matchup, matchup2: Matchup) {
-        this._matchups = [
-            matchup1,
-            matchup2
-        ];
-    }
-
-    public get matchups(): Matchup[] {
-        return this._matchups;
-    }
+    constructor(public matchups: Matchup[]) { }
     
+    public hasMatchupOverlap(): boolean {
+        for (let i = 0; i < this.matchups.length; i++) {
+            for (let j = i + 1; j < this.matchups.length; j++) {
+                const matchup1 = this.matchups[i];
+                const matchup2 = this.matchups[j];
+
+                if (matchup1.hasOverlap(matchup2)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public get totalRankDifference(): number {
-        return this._matchups[0].combinedRankDifference + this._matchups[1].combinedRankDifference;
+        return this.matchups.reduce((accumulator, currentValue) => {
+            return accumulator + currentValue.combinedRankDifference
+        }, 0);
     }
 }
