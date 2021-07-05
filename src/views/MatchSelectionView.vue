@@ -22,11 +22,15 @@ export default class MatchSelectionView extends Vue {
 
     let _text = '';
     this.rounds.forEach((round) => {
-      _text += '##################################################\n';
-      _text += this.writeMatchup(round.matchups[0]);
-      _text += "\nAnd\n";
-      _text += this.writeMatchup(round.matchups[1]);
-      _text += '\n##################################################\n\n';
+      _text += '\n##################################################\n';
+
+      for (let i = 0; i < round.matchups.length; i++) {
+        if (i != 0) {
+        _text += "\nAnd\n";
+        }
+
+        _text += this.writeMatchup(round.matchups[i]);
+      }
     });
 
     return _text;

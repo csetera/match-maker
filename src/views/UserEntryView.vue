@@ -7,10 +7,6 @@
 
 <script lang="ts">
 import { Component, Emit, Vue } from "vue-property-decorator";
-import Matchup from '@/models/Matchup';
-import Pair from '@/models/Pair';
-import Player from '@/models/Player';
-import Round from '@/models/Round';
 
 @Component
 export default class UserEntryView extends Vue {
@@ -20,6 +16,7 @@ export default class UserEntryView extends Vue {
   public onGenerate(): string {
     return this.names
   }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
