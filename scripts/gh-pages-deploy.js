@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+// Based in part on https://medium.com/swlh/auto-deploy-vue-js-to-github-pages-using-actions-723a2206e4d3
 const execa = require("execa");
 const fs = require("fs");
 

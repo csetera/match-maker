@@ -7,13 +7,19 @@
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 import Matchup from '@/models/Matchup';
+import MatchGenerator from '@/services/MatchGenerator';
 import Round from '@/models/Round';
 
 @Component
 export default class MatchSelectionView extends Vue {
   // PROPERTIES
-  @Prop(Array)
-  public readonly rounds!: Round[];
+  @Prop(String)
+  public readonly players!: string;
+
+  get rounds(): Round[] {
+    const nameArray = this.players.split('|');
+    return new MatchGenerator(nameArray).generateLineups();
+  }
 
   public get text(): string {
     if (!this.rounds) {
