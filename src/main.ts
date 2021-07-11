@@ -6,6 +6,7 @@ import Vue from 'vue'
 import Router from 'vue-router';
 import MatchSelectionView from '@/views/MatchSelectionView.vue';
 import UserEntryView from '@/views/UserEntryView.vue';
+import '@/styles/app.scss';
 
 const router = new Router({
   mode: 'history',
