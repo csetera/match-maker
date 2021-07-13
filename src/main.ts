@@ -9,6 +9,7 @@ import UserEntryView from '@/views/UserEntryView.vue';
 import '@/styles/app.scss';
 
 const router = new Router({
+  base: process.env.VUE_APP_BASE_URL,
   mode: 'history',
   routes: [
       { path: '/', name: 'user-entry', component: UserEntryView },
